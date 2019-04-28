@@ -1,0 +1,83 @@
+/*
+não completo
+*/
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct carga  CARGA;
+
+struct carga{
+    long int ID;//numero de identificação da carga(1 ≤ ID ≤ 10^9)
+    int V;//volume da carga(V=A*L*C ,1 ≤V ≤10^6)
+    CARGA *before;
+    CARGA *next;
+};
+
+CARGA *inicia_dados();
+CARGA *Counting_Sort(CARGA *first,int N);
+
+int main(){
+    int T;//casos de teste(1 ≤ T ≤ 100)
+    scanf("%d",&T);
+    for(int i=0;i<T;i++){
+        int P;//carga por motorista(1 ≤ P ≤ N)
+        int N;//numero de cargas((1 ≤ N ≤ 10^5)
+        CARGA *first;
+        CARGA *atual;
+
+        scanf("%d %d",&P,&N);
+        first=inicia_dados();
+        atual=first;
+
+        for(int j=0;j<N;j++){
+            int medidas[3];
+            if(j>0){
+                atual->next=inicia_dados();
+                atual->next->before=atual;
+                atual=atual->next;
+            }
+                scanf("%ld %d %d %d",&atual->ID,&medidas[0],&medidas[1],&medidas[2]);
+                atual->V = medidas[0]*medidas[1]*medidas[2];
+        }
+
+        atual=Counting_Sort(first,N);
+
+        for (int i=0;i<P;i++){
+            if(i<P-1){
+                printf("%ld ",atual[P].ID);
+            }else{
+                printf("%ld",atual[P].ID);
+            }
+        }
+        printf("\n");
+
+        free(first);
+    }
+}
+
+CARGA *inicia_dados(){
+    CARGA *ret;
+    ret=(CARGA *)malloc(sizeof(CARGA));
+
+    ret->next=NULL;
+    ret->before=NULL;
+
+    return ret;
+}
+
+CARGA *Counting_Sort(CARGA *first,int N){
+    CARGA *ret;
+    CARGA *atual;
+    ret=inicia_dados();
+    atual=ret;
+
+    for(int i=1;i<N;i++){
+        atual->next=inicia_dados();
+        atual->next->before=atual;
+        atual=atual->next;
+        }
+    }
+
+
+    return ret;
+}
