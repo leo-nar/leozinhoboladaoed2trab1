@@ -1,3 +1,11 @@
+/*  Aluno:
+    Aluno:
+----------------------------------------
+t=numero de testes(1 ≤ t ≤ 100)
+n=numero total de cargas (1 ≤ n ≤ 10^5)
+p=numero de cargas por motorista(1 ≤ p ≤ n)
+
+*/
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -6,11 +14,31 @@ struct entrada {
     int a, l, c;
 };
 
-void quick_sort(int *A, int tam);
-
-int* solucao(struct entrada *entradas, int n, int p)
+int *solucao(struct entrada *entradas, int n, int p)
 {
-    quick_sort(entradas,n);
+    int *ret=(int*)malloc(p*sizeof(int));
+    int i,k,aux,maior;
+
+    for(i=0;i<n;i++){
+        entradas[i].a=entradas[i].a*entradas[i].l*entradas[i].c;//calcula o volumee coloca o valor em a
+    }
+    for(i=0;i<p;i++){
+        maior=0;
+        for(k=0;k<n;k++){
+            if(maior<entradas[k].a){
+                maior=entradas[k].a;
+                aux=k;
+            }
+            if(maior==entradas[k].a){
+                if(entradas[aux].id>entradas[k].id){
+                    aux=k;
+                }
+            }
+        }
+        ret[i]=entradas[aux].id;
+        entradas[aux].a=0;
+    }
+
     return ret;
 }
 
@@ -20,13 +48,13 @@ int main()
     int t, i, j;
     int T, N, P, ID, A, L, C;
 
-    scanf("%d", &T);
+    scanf("%d",&T);
 
-    for (t = 0; t < T; t++) {
+    for(t=0;t<T;t++) {
 
-        scanf("%d %d", &N, &P);
+        scanf("%d %d",&N,&P);
 
-        struct entrada *entradas = (struct entrada *) malloc(N * sizeof(struct entrada));
+        struct entrada *entradas=(struct entrada*)malloc(N*sizeof(struct entrada));
         for (i = 0; i < N; i++) {
             scanf("%d %d %d %d", &entradas[i].id, &entradas[i].a, &entradas[i].l, &entradas[i].c);
         }
@@ -41,25 +69,4 @@ int main()
     }
 
     return 0;
-}
-
-void quicksort(int *A, int tam) {
-  if (tam < 2) return;
-
-  int pivo = A[tam / 2];
-
-  int i, j;
-  for (i = 0, j = tam - 1; ; i++, j--) {
-    while (A[i] < pivo) i++;
-    while (A[j] > pivo) j--;
-
-    if (i >= j) break;
-
-    int temp = A[i];
-    A[i]     = A[j];
-    A[j]     = temp;
-  }
-
-  quicksort(A, i);
-  quicksort(A + i, tam - i);
 }
